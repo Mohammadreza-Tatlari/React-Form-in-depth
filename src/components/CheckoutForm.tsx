@@ -1,4 +1,4 @@
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, FieldValue, FieldErrors } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import "../App.css";
 import { useEffect } from "react";
@@ -53,28 +53,43 @@ export default function CheckoutForm() {
   const { register, control, handleSubmit, formState , watch , getValues , setValue} = form;
   //   const { name, ref, onChange, onBlur } = register("username");
 
-  const { errors } = formState;
+  const { errors , touchedFields , dirtyFields , isDirty} = formState;
+
+  //loging touched and dirty property of each value
+  //console.log( touchedFields , dirtyFields , isDirty);
+  
   //data being passed by handleSubmit
   const onSubmit = (data: FormValue) => {
     console.log("form is submitted", data);
   };
+
+  const onError = (errors: FieldErrors<FormValue>) => {
+    console.log("Errors are" , errors , "end of Form Error");
+    
+  }
 
   const { fields, append, remove } = useFieldArray({
     name: "phNumbers",
     control,
   });
 
+  const primaryExists = getValues('phoneNumbers.0') === "";
+  let setitTrue;
+  if(primaryExists){
+    setitTrue = true
+  }
+
   //watch method is used for reusing or checking the form values
   //const watchedName = watch('username')
   //also whole value can be shown
 
 //I am using useEffect to prevent re-render of whole page and improve performance
-  useEffect(() => {
+  //useEffect(() => {
     //const subscription = watch((value) => {
       //console.log(value);
     //})
     //return () => subscription.unsubscribe();
-  }, [watch]);
+  //}, [watch]);
 
   //a function to retrieve values. and does not re-render data over manipulation
   function handleGetValue(){
@@ -104,7 +119,7 @@ export default function CheckoutForm() {
       {/* <h3>your name is: {watchedName}</h3> */}
       {/* by using handleSubmit(onsubmit) onsubmit recieve full access over data */}
       {/* noValidate is added and the condition is sent to each register object */}
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit , onError)} noValidate>
         <label htmlFor="username">UserName</label>
         {/* by assigning these values React Form tracks the value of input 
         but when istead we use spread operation and assign name to register hook*/}
@@ -223,11 +238,13 @@ export default function CheckoutForm() {
         />
         <p>{errors.phoneNumbers?.[0]?.message}</p>
        
+
         <label htmlFor="secondary-phoneNumber">secondary phone number</label>
         <input
           type="text"
           id="secondary-phoneNumber"
           {...register("phoneNumbers.1", {
+            disabled: setitTrue,
             required: {
               value: true,
               message: "secondary Phone Number is not valid",
@@ -279,3 +296,6 @@ export default function CheckoutForm() {
     </div>
   );
 }
+
+
+
