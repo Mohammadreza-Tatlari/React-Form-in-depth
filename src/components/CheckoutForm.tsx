@@ -50,7 +50,7 @@ export default function CheckoutForm() {
     //}
   });
   //formstate added for displaying error to user
-  const { register, control, handleSubmit, formState , watch} = form;
+  const { register, control, handleSubmit, formState , watch , getValues , setValue} = form;
   //   const { name, ref, onChange, onBlur } = register("username");
 
   const { errors } = formState;
@@ -70,13 +70,33 @@ export default function CheckoutForm() {
 
 //I am using useEffect to prevent re-render of whole page and improve performance
   useEffect(() => {
-    const subscription = watch((value) => {
-      console.log(value);
-    })
-    return () => subscription.unsubscribe();
+    //const subscription = watch((value) => {
+      //console.log(value);
+    //})
+    //return () => subscription.unsubscribe();
   }, [watch]);
 
+  //a function to retrieve values. and does not re-render data over manipulation
+  function handleGetValue(){
+    console.log("UserName and Age and twitter" , getValues(['username', 'age' , 'social.twitter'])); //it can show specific field values by putting them in an array
+    console.log("all retrieved Data" , getValues())
+  }
 
+  function handleSetValue(){
+    //the third argument is an optional object for field validation and other properties
+    setValue('username', 'Real Name' , {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true
+    })
+    setValue('email' , '' , {
+      shouldDirty: true,
+      shouldValidate: false
+    })
+  }
+
+
+//Main JSX and Return --------------------------------------------------------------------------------------------------------------------
   counterofRender++;
   return (
     <div>
@@ -245,6 +265,9 @@ export default function CheckoutForm() {
         </div>
         <hr />
         <button>{errors.email ? "دوباره" : "Submit"}</button>
+        <button onClick={handleGetValue}>Log Data in Console</button>
+        <hr/>
+        <button onClick={handleSetValue}>Set Name and remove Email</button>
       </form>
       {/* associate the devtool with the form that is being tracked with control object 
       by seeing dirty and touch in react devtool everything can be sanity checked*/}
