@@ -1,9 +1,0 @@
-how assigning to useform and register works. how spread operation can assign inputs value to react form
-npm install react-hook-form
-.devTool for visualization of each data and value of inputs
-npm install -D @hook-form/devtools
-
-react form does not rerender so it helps performance. can be checked by a number in rendering
-
-
-
