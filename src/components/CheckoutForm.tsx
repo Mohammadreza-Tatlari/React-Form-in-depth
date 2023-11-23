@@ -50,13 +50,14 @@ export default function CheckoutForm() {
     //}
   });
   //formstate added for displaying error to user
-  const { register, control, handleSubmit, formState , watch , getValues , setValue} = form;
+  const { register, control, handleSubmit, formState , watch , getValues , setValue , reset} = form;
   //   const { name, ref, onChange, onBlur } = register("username");
 
   const { errors , touchedFields , dirtyFields , isDirty} = formState;
+  const {isSubmitting , isSubmitSuccessful , isSubmitted} = formState
 
   //loging touched and dirty property of each value
-  //console.log( touchedFields , dirtyFields , isDirty);
+  console.log("is Touched or dirty", touchedFields);
   
   //data being passed by handleSubmit
   const onSubmit = (data: FormValue) => {
@@ -110,12 +111,25 @@ export default function CheckoutForm() {
     })
   }
 
+  //reset does not empty all fields but it returns values into initially values that are defined in formValue
+  // useEffect(()=> {
+  //   if(isSubmitted){
+  //     reset()
+  //   }
+  // },[isSubmitted ,reset])
+  
 
 //Main JSX and Return --------------------------------------------------------------------------------------------------------------------
   counterofRender++;
   return (
     <div>
-      <h5>render time: {counterofRender}</h5>
+     <h5>render time: {counterofRender}</h5>
+      {
+        isSubmitSuccessful && (
+          <h2>form submitted successfully</h2>
+        )
+      }
+
       {/* <h3>your name is: {watchedName}</h3> */}
       {/* by using handleSubmit(onsubmit) onsubmit recieve full access over data */}
       {/* noValidate is added and the condition is sent to each register object */}
@@ -281,10 +295,11 @@ export default function CheckoutForm() {
           </div>
         </div>
         <hr />
-        <button>{errors.email ? "دوباره" : "Submit"}</button>
+        <button disabled={isSubmitting || !touchedFields}>{errors.email ? "دوباره" : "Submit"}</button>
         <button onClick={handleGetValue}>Log Data in Console</button>
         <hr/>
         <button onClick={handleSetValue}>Set Name and remove Email</button>
+        <button onClick={()=> reset()}>reset all fields</button>
       </form>
       {/* associate the devtool with the form that is being tracked with control object 
       by seeing dirty and touch in react devtool everything can be sanity checked*/}
