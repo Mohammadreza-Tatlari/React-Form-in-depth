@@ -10,7 +10,8 @@ export default function EmailVerify() {
     const form = useForm<formValue>({
         defaultValues: {
             email: ''
-        }
+        },
+        mode:"onTouched"
     })
 
     const {register , control , formState , handleSubmit} = form

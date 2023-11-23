@@ -37,7 +37,8 @@ export default function CheckoutForm() {
       },
       phNumbers: [{ number: "" }],
     },
-
+    mode: "onBlur" // onSubmit, onChange , onTouched , all ,...  
+   
     //*by adding async function we can hold default data from a API data point
     // defaultValues: async () => {
     //   const response = await fetch('https://jsonplaceholder.typicode.com/users/1');
